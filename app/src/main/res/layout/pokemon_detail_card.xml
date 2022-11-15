@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvPokemonDetails"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pokemonNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:gravity="center"
+                android:text="Nombre Pokemon"
+                android:textSize="18dp"
+                android:textStyle="bold"></TextView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/pokedex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:gravity="center"
+                android:text="National pokedex: "
+                android:textSize="16dp"
+                android:textStyle="italic"></TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="14dp">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="3dp" />
+
+                <ImageView
+                    android:id="@+id/imgFront"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_margin="3dp"
+                    android:layout_toEndOf="@+id/imgBack" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tipo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:gravity="center"
+                    android:text="Tipo1" />
+
+                <TextView
+                    android:id="@+id/tipo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:gravity="center"
+                    android:text="Tipo2" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <LinearLayout
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginEnd="73dp">
+
+                <TextView
+                    android:id="@+id/descPokemon"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textSize="14dp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/habLayout"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ability 1: "
+                    android:textSize="14dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/hab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ability 2: "
+                    android:textSize="14dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/habOculta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hidden Ability: "
+                    android:textSize="14dp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/pokemonPeso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weigth: "
+                    android:textSize="14dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/pokemonAltura"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Heigth: "
+                    android:textSize="14dp"
+                    android:textStyle="bold"></TextView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+        </RelativeLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="HP"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="Atk"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="Def"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="SpA"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="SpD"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:text="Spe"
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp">
+                <TextView
+                    android:id="@+id/ValuePS"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/ValueAtk"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/ValueDef"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/ValueSpA"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/ValueSpD"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/ValueSpe"
+                    android:layout_width="60dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="12dp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
