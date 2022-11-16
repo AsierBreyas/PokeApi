@@ -34,14 +34,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="Pokedex" />
+                android:text="Pokedex"
+                android:onClick="cambioFiltro"/>
 
             <RadioButton
                 android:id="@+id/activacionTipos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="Types" />
+                android:text="Types"
+                android:onClick="cambioFiltro"/>
         </RadioGroup>
     </LinearLayout>
 
