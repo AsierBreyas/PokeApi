@@ -53,4 +53,11 @@ public class PokemonCard {
     public void setNumeroPokedex(int numeroPokedex) {
         this.numeroPokedex = numeroPokedex;
     }
+
+    public boolean tipo2Existe() {
+        if (tipo2 != null)
+            return true;
+        else
+            return false;
+    }
 }

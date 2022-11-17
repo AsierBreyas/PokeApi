@@ -20,12 +20,12 @@
             android:layout_marginRight="6dp"
             android:orientation="vertical"
             android:padding="6dp">
+
             <TextView
                 android:id="@+id/pokemonCardNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_marginEnd="6dp"
                 android:layout_marginRight="6dp"
                 android:gravity="center"
