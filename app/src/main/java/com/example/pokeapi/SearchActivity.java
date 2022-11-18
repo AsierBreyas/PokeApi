@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject pokemon = new JSONObject(response);
-                    PokemonCard pokemonCard = new PokemonCard(pokemon.getString("name"), pokemon.getJSONArray("types").getJSONObject(0).getJSONObject("type").getString("name"),)
+                    PokemonCard pokemonCard = new PokemonCard(pokemon.getString("name"), pokemon.getJSONArray("types").getJSONObject(0).getJSONObject("type").getString("name"),pokemon.getJSONObject("sprites").getJSONObject("other").getJSONObject("official-artwork").getString("front-default"),pokemon.getInt("id"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
