@@ -8,21 +8,28 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pokeapi.cardsAdapter.PokemonCardsAdapter;
 import com.example.pokeapi.clases.PokemonCard;
+import com.example.pokeapi.clases.PokemonDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class SearchActivity extends AppCompatActivity {
     public String listadoTodosPokesUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
     public String currentUrl =  listadoTodosPokesUrl;
+    public List<PokemonCard> listaPokemonCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class SearchActivity extends AppCompatActivity {
                     for (int i = 0; i < arrayListadoPokemon.length(); i++){
                         llamarPokemon(arrayListadoPokemon.getJSONObject(i).getString("url"));
                     }
+                    llamarAdaptador();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -57,6 +65,12 @@ public class SearchActivity extends AppCompatActivity {
         });
         Volley.newRequestQueue(this).add(postResquest);
     }
+    public void llamarAdaptador(){
+        PokemonCardsAdapter pokemonCardsAdapter = new PokemonCardsAdapter(listaPokemonCard, this);
+        RecyclerView recyclerView = findViewById(R.id.pokemonCardList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
     public void llamarPokemon(String url){
         StringRequest postResquest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
 
@@ -65,6 +79,10 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     JSONObject pokemon = new JSONObject(response);
                     PokemonCard pokemonCard = new PokemonCard(pokemon.getString("name"), pokemon.getJSONArray("types").getJSONObject(0).getJSONObject("type").getString("name"),pokemon.getJSONObject("sprites").getJSONObject("other").getJSONObject("official-artwork").getString("front-default"),pokemon.getInt("id"));
+                    if(pokemon.getJSONArray("types").length() > 1) {
+                        pokemonCard.setTipo2(pokemon.getJSONArray("types").getJSONObject(1).getJSONObject("type").getString("name"));
+                    }
+                    listaPokemonCard.add(pokemonCard);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
