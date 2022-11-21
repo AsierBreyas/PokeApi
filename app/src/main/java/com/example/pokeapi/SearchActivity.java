@@ -1,11 +1,15 @@
 package com.example.pokeapi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,12 +28,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
     public String listadoTodosPokesUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
     public String currentUrl =  listadoTodosPokesUrl;
-    public List<PokemonCard> listaPokemonCard;
+    public List<PokemonCard> listaPokemonCard = new ArrayList<>();
+    public List<String> listaSpinner = new ArrayList<>();
+    public Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +57,10 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     JSONObject objectListadoPokemon = new JSONObject(response);
                     JSONArray arrayListadoPokemon = objectListadoPokemon.getJSONArray("results");
+                    listaPokemonCard.clear();
                     for (int i = 0; i < arrayListadoPokemon.length(); i++){
-                        llamarPokemon(arrayListadoPokemon.getJSONObject(i).getString("url"));
+                        String nombre = arrayListadoPokemon.getJSONObject(i).getString("name");
+                        listaPokemonCard.add(new PokemonCard(nombre));
                     }
                     llamarAdaptador();
                 } catch (JSONException e) {
@@ -70,19 +80,46 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.pokemonCardList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(pokemonCardsAdapter);
     }
-    public void llamarPokemon(String url){
-        StringRequest postResquest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+    public void llamarListadoDeTipos(){
+        StringRequest postResquest = new StringRequest(Request.Method.GET, currentUrl, new Response.Listener<String>(){
 
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject pokemon = new JSONObject(response);
-                    PokemonCard pokemonCard = new PokemonCard(pokemon.getString("name"), pokemon.getJSONArray("types").getJSONObject(0).getJSONObject("type").getString("name"),pokemon.getJSONObject("sprites").getJSONObject("other").getJSONObject("official-artwork").getString("front-default"),pokemon.getInt("id"));
-                    if(pokemon.getJSONArray("types").length() > 1) {
-                        pokemonCard.setTipo2(pokemon.getJSONArray("types").getJSONObject(1).getJSONObject("type").getString("name"));
+                    JSONObject objectListadoPokemon = new JSONObject(response);
+                    JSONArray arrayListadoPokemon = objectListadoPokemon.getJSONArray("pokemon");
+                    listaPokemonCard.clear();
+                    for (int i = 0; i < arrayListadoPokemon.length(); i++){
+                        listaPokemonCard.add( new PokemonCard(arrayListadoPokemon.getJSONObject(i).getJSONObject("pokemon").getString("name")));
                     }
-                    listaPokemonCard.add(pokemonCard);
+                    llamarAdaptador();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.getMessage());
+            }
+        });
+        Volley.newRequestQueue(this).add(postResquest);
+    }
+    public void llamarListadoDePokedex(){
+        StringRequest postResquest = new StringRequest(Request.Method.GET, currentUrl, new Response.Listener<String>(){
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject objectListadoPokemon = new JSONObject(response);
+                    JSONArray arrayListadoPokemon = objectListadoPokemon.getJSONArray("pokemon_entries");
+                    listaPokemonCard.clear();
+                    for (int i = 0; i < arrayListadoPokemon.length(); i++){
+                        listaPokemonCard.add( new PokemonCard(arrayListadoPokemon.getJSONObject(i).getJSONObject("pokemon_species").getString("name")));
+                    }
+                    llamarAdaptador();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -98,11 +135,11 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                return true;
+                finish();
             case R.id.search:
-                return true;
+                startActivity( new Intent(SearchActivity.this, SearchActivity.class));
             case R.id.revert:
-                return true;
+                finish();
         }
         return (super.onOptionsItemSelected(item));
     }
@@ -112,14 +149,91 @@ public class SearchActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.activacionPokedex:
                 if (checked) {
+                    StringRequest postResquest = new StringRequest(Request.Method.GET, "https://pokeapi.co/api/v2/pokedex", new Response.Listener<String>(){
 
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject objectListadoPokedex = new JSONObject(response);
+                                listaSpinner.clear();
+                                spinner  = (Spinner) findViewById(R.id.spinnerFiltros);
+                                JSONArray arrayPokedex = objectListadoPokedex.getJSONArray("results");
+                                for(int i = 0; i < arrayPokedex.length(); i++){
+                                    listaSpinner.add(arrayPokedex.getJSONObject(i).getString("name"));
+                                }
+                                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_item, listaSpinner);
+                                spinner.setAdapter(spinnerAdapter);
+                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        currentUrl = "https://pokeapi.co/api/v2/pokedex/" + adapterView.getItemAtPosition(i).toString();
+                                        System.out.println(currentUrl);
+                                        llamarListadoDePokedex();
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Error", error.getMessage());
+                        }
+                    });
+                    Volley.newRequestQueue(this).add(postResquest);
                 }
                 break;
             case R.id.activacionTipos:
                 if (checked) {
+                    StringRequest postResquest = new StringRequest(Request.Method.GET, "https://pokeapi.co/api/v2/type", new Response.Listener<String>(){
 
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject objectListadoTipos = new JSONObject(response);
+                                listaSpinner.clear();
+                                spinner  = (Spinner) findViewById(R.id.spinnerFiltros);
+                                JSONArray arrayTipos = objectListadoTipos.getJSONArray("results");
+                                for(int i = 0; i < arrayTipos.length(); i++){
+                                    listaSpinner.add(arrayTipos.getJSONObject(i).getString("name"));
+                                }
+                                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_item, listaSpinner);
+                                spinner.setAdapter(spinnerAdapter);
+                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        currentUrl = "https://pokeapi.co/api/v2/type/" + adapterView.getItemAtPosition(i).toString();
+                                        System.out.println(currentUrl);
+                                        llamarListadoDeTipos();
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Error", error.getMessage());
+                        }
+                    });
+                    Volley.newRequestQueue(this).add(postResquest);
                 }
                 break;
         }
+    }
+    public void llamarDetails(Bundle bundle){
+
     }
 }

@@ -1,18 +1,17 @@
 package com.example.pokeapi;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -24,44 +23,42 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Random;
-
-public class MainActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
+    public String url;
     PokemonDetails pokemonDetails;
     String pokemonDetialsUrl;
-
-    @Override
+    TextView nombre;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        pokemonDetailsInicio();
+        setContentView(R.layout.activity_details);
+        Bundle b = getIntent().getExtras();
+        url = b.getString("url");
+        llamarPokemonDetails();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.home:
-                startActivity( new Intent(MainActivity.this, MainActivity.class));
+                startActivity( new Intent(DetailsActivity.this, MainActivity.class));
             case R.id.search:
-                startActivity( new Intent(MainActivity.this, SearchActivity.class));
+                startActivity( new Intent(DetailsActivity.this, SearchActivity.class));
             case R.id.revert:
                 finish();
         }
-        return(super.onOptionsItemSelected(item));
+        return (super.onOptionsItemSelected(item));
     }
-    public void pokemonDetailsInicio(){
-        int pokeRandom = new Random().nextInt(905)+1;
-        String apiRandomString = "https://pokeapi.co/api/v2/pokemon/"+ pokeRandom +"/";
-
-        StringRequest postResquest = new StringRequest(Request.Method.GET, apiRandomString, new Response.Listener<String>() {
+    public void llamarPokemonDetails(){
+        StringRequest postResquest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String name = jsonObject.getString("name");
+                    setNombre(name);
                     String imgUrlBack = jsonObject.getJSONObject("sprites").getString("back_default");
                     String imgUrlFront = jsonObject.getJSONObject("sprites").getString("front_default");
                     String imgUrlFrontShiny = jsonObject.getJSONObject("sprites").getString("front_shiny");
@@ -100,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Volley.newRequestQueue(this).add(postResquest);
-
     }
     public void pokemonLlamarDetails(){
         StringRequest postResquest = new StringRequest(Request.Method.GET, pokemonDetialsUrl, new Response.Listener<String>() {
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                         pokemonDetails.setDescpricion(descripciones.getJSONObject(0).getString("flavor_text"));
                     pokemonDetails.setNumPokedex(detalles.getJSONArray("pokedex_numbers").getJSONObject(0).getInt("entry_number"));
                     PokemonDetailsAdapter pokemonDetailsAdapter = new PokemonDetailsAdapter(pokemonDetails, getApplicationContext());
-                    RecyclerView recyclerView = findViewById(R.id.pokemonDetailsExample);
+                    RecyclerView recyclerView = findViewById(R.id.PokemonDetail);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     recyclerView.setAdapter(pokemonDetailsAdapter);
@@ -136,5 +132,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Volley.newRequestQueue(this).add(postResquest);
+    }
+    public void setNombre(String nombrePokemon){
+        nombre = findViewById(R.id.PokemonNameDetail);
+        nombre.setText(nombre.getText() + " - " + nombrePokemon );
     }
 }
