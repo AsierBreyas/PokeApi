@@ -38,11 +38,14 @@ public class SearchActivity extends AppCompatActivity {
     public List<PokemonCard> listaPokemonCard = new ArrayList<>();
     public List<String> listaSpinner = new ArrayList<>();
     public Spinner spinner;
+    public RadioButton pokedex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         llamarListadoPokemon();
+        pokedex = findViewById(R.id.activacionPokedex);
+        pokedex.setChecked(true);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -232,8 +235,5 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-    public void llamarDetails(Bundle bundle){
-
     }
 }
